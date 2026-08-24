@@ -49,6 +49,11 @@ public:
         currentFrame = 0;
         timer = 0;
     }
+
+    int currentFrame ()
+    {
+        return currentFrame;
+    }
 };
 
 class Timer
@@ -199,14 +204,18 @@ void drawObject (const SDLState &state, GameObject &obj, float deltaTime, float 
         const float FRAME_W = texW / SHEET_COLS;
         const float FRAME_H = texH / SHEET_ROWS;
         const float DISPLAY_SIZE = 96.0f; // kích thước hiển thị mong muốn trên màn hình logic
-        int currentFrame = 0;
+        const float spriteSizeW = texW / 4;
+        const float spriteSizeH = texH / 4;
 
         int currentCol = 0; //
         int currentRow = 0; //
+        float srcX = obj.currentAnimation != -1 ? obj.animations[obj.currentAnimation].currentFrame() * spriteSizeW : 0.0f;
+
+        float srcY = obj.currentAnimation != -1 ? obj.animations[obj.currentAnimation].currentFrame() * spriteSizeH : 0.0f;
 
         // --- srcRect: cắt frame từ ảnh gốc ---
         SDL_FRect srcRect = {
-            currentCol * FRAME_W,   // x = cột * chiều rộng 1 frame
+            srcX,   // x = cột * chiều rộng 1 frame
             currentRow * FRAME_H,   // y = hàng * chiều cao 1 frame
             FRAME_W,
             FRAME_H
